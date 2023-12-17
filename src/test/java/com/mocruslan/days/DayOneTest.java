@@ -2,22 +2,37 @@ package com.mocruslan.days;
 
 import org.junit.jupiter.api.Test;
 
-import java.util.Arrays;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 class DayOneTest {
 
     @Test
-    void testSolve() {
+    void testSolve_NumbersFound() {
         String input = """
-                1abc2
-                pqr3stu8vwx
-                a1b2c3d4e5f
-                treb7uchet
+                two1nine
+                eightwothree
+                abcone2threexyz
+                xtwone3four
+                4nineeightseven2
+                zoneight234
+                7pqrstsixteen
                 """;
-        DayOne dayOne = new DayOne(input);
 
-        assertEquals(dayOne.solve(), 142);
+        assertEquals(281, new DayOne(input).solve());
+    }
+
+    @Test
+    void testSolve_StringNumberUppercase() {
+        String input = """
+                Two1Nine
+                eightwothree
+                abcone2THREExyz
+                xtwone3FOUR
+                4nineeightseven2
+                zoneight234
+                7pqrstsixteen
+                """;
+
+        assertEquals(281, new DayOne(input).solve());
     }
 }

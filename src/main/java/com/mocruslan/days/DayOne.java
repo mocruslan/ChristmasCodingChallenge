@@ -1,8 +1,9 @@
 package com.mocruslan.days;
 
 
+import com.mocruslan.shared.helper.StringHelper;
+
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class DayOne implements IDaySolver<Integer> {
@@ -12,30 +13,32 @@ public class DayOne implements IDaySolver<Integer> {
         this.input = input;
     }
 
+    @Override
     public Integer solve() {
-        ArrayList<Integer> numbers = new ArrayList<>();
-        this.getInputAsList().forEach(str -> {
-                    Integer firstDigit = this.getFirstDigitFromString(str);
-                    Integer lastDigit = this.getLastDigitFromString(str);
+        String data = this.normalize(this.input);
 
-                    numbers.add(Integer.parseInt(String.format("%d%d", firstDigit, lastDigit)));
+        List<Integer> numbers = new ArrayList<>();
+        StringHelper.splitStringByLine(data).forEach(str -> {
+                    if (str.isBlank()) return;
+
+                    int[] digits = extractDigits(str);
+                    numbers.add(Integer.parseInt(String.format("%d%d", digits[0], digits[digits.length - 1])));
                 }
         );
 
         return numbers.stream().reduce(0, Integer::sum);
     }
 
-    protected List<String> getInputAsList() {
-        return Arrays.asList(input.split("\n"));
+    protected String normalize(String input) {
+        input = input.toLowerCase();
+        input = StringHelper.replaceFirstAndLastNumberWords(input);
+        return input;
     }
 
-    protected Integer getFirstDigitFromString(String str) {
-        return Integer.parseInt(str.replaceAll("[^0-9]", "").substring(0, 1));
-    }
-
-    protected Integer getLastDigitFromString(String str) {
-        return Integer.parseInt(str.replaceAll("[^0-9]", "").substring(
-                str.replaceAll("[^0-9]", "").length() - 1)
-        );
+    public static int[] extractDigits(String input) {
+        return input.replaceAll("[^0-9]", "")
+                .chars()
+                .map(Character::getNumericValue)
+                .toArray();
     }
 }
